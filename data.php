@@ -55,10 +55,10 @@ Tere, <?=$_SESSION['user_email'];?> <a href="?logout=1">Logi välja</a>
 </form>
 
 <h2>Minu huvialad</h2>
-<?php if(isset($add_interest_response->error)): ?>
+<?php if(isset($add_user_interest_response->error)): ?>
   
   <p style="color:red"><?=$add_user_interest_response->error->message;?></p>
-<?php elseif(isset($add_interest_response->success)): ?>
+<?php elseif(isset($add_user_interest_response->success)): ?>
 
 <p style="color:green;">
     <?=$add_user_interest_response->success->message;?>
@@ -68,5 +68,7 @@ Tere, <?=$_SESSION['user_email'];?> <a href="?logout=1">Logi välja</a>
     <?=$InterestManager->createDropdown();?>
   	<input type="submit" value="Lisa">
 </form>
-    
+
+<h2>Loetelu</h2>
+<?=$InterestManager->getUserInterests();?>
    
