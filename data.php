@@ -27,6 +27,10 @@
     if(isset($_GET["new_interest"])){
         $add_interest_response = $InterestManager->addInterest($_GET["new_interest"]);
     }
+    
+    if(isset($_GET["dropdown_interest"])){
+        $add_user_interest_response = $InterestManager->addUserInterest($_GET["dropdown_interest"]);
+    }
     ?>
     
     
@@ -51,4 +55,18 @@ Tere, <?=$_SESSION['user_email'];?> <a href="?logout=1">Logi välja</a>
 </form>
 
 <h2>Minu huvialad</h2>
-<?=$InterestManager->createDropdown();?>
+<?php if(isset($add_interest_response->error)): ?>
+  
+  <p style="color:red"><?=$add_user_interest_response->error->message;?></p>
+<?php elseif(isset($add_interest_response->success)): ?>
+
+<p style="color:green;">
+    <?=$add_user_interest_response->success->message;?>
+</p>
+  <?php endif; ?>
+    <form>
+    <?=$InterestManager->createDropdown();?>
+  	<input type="submit" value="Lisa">
+</form>
+    
+   

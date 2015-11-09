@@ -72,7 +72,7 @@ class InterestManager{
             
             //iga rea kohta
             while($stmt->fetch()){
-                $html .='<option>'.$name.'<option>';
+                $html .='<option value="'.$id.'">'.$name.'<option>';
             }
             
             $stmt->close();
@@ -83,6 +83,53 @@ class InterestManager{
             
             return $html;
         }
+        
+        function addUserInterest($interest_id){
+            
+
+            $response = New StdClass();
+        
+            $stmt = $this->connection->prepare("SELECT id FROM user_interests WHERE interests_id=?");
+            $stmt->bind_param("s", $interests_id);
+            $stmt->bind_result($id);
+            $stmt->execute();
+        
+        
+            if($stmt->fetch()){
+                
+                $error = new StdClass();
+                $error->id = 0;
+                $error->message = "Huviala '".$name."' on juba olemas";
+            
+                $response->error = $error;
+            
+                //pärast return käsku, fn'i enam edasi ei vaadata
+                return $response;
+            }
+
+            //siia olen jõunud, siis kui emaili ei olnud 
+        
+            $stmt = $this->connection->prepare("INSERT INTO user_interests (user_id, interests_id) VALUES (?,?)");
+            $stmt->bind_param("ii", $this->user_id, $interest_id);
+            if($stmt->execute()){
+                //sisestamine õnnestus
+                $success = new StdClass();
+                $success->message = "Huviala edukalt lisatud";
+            
+                $response->success = $success;
+            }else{
+                //ei õnnestunud
+                $error = new StdClass();
+                $error->id = 1;
+                $error->message = "Midagi läks katki";
+            
+                $response->error = $error;
+            }
+            $stmt->close();
+        
+            return $response;
+        
     
+        }
 }
 ?>
